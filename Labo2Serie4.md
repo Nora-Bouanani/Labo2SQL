@@ -1,0 +1,63 @@
+# Série 4 : les groupements
+
+1. Rechercher le nombre de cars de chaque marque. On affichera la marque ainsi que le nombre de véhicules correspondants.
+    ~~~sql
+    SELECT MARQUE,COUNT(NUMIMMATRICULATION) AS "Nombre de vehicules"
+    FROM AG_CARS
+    GROUP BY MARQUE;
+    ~~~
+ 
+2. Rechercher le nombre de langues parlées par les différents accompagnateurs. On affichera le nom, le prénom,
+    le pays de l'accompagnateur ainsi que le nombre de langues qu'il maîtrise.
+    ~~~sql
+    SELECT AG_ACCOMPAGNATEURS.NOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PRENOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PAYSACCOMPAGNATEUR,COUNT(LIBELLELANGUE) AS "Nombre de langues parlees"
+    FROM AG_LANGUES,AG_ACCOMPAGNATEURS,AG_CONNAIT
+    WHERE AG_ACCOMPAGNATEURS.NUMACCOMPAGNATEUR=AG_CONNAIT.NUMACCOMPAGNATEUR
+    AND AG_CONNAIT.CODELANGUE=AG_LANGUES.CODELANGUE
+    GROUP BY  AG_ACCOMPAGNATEURS.NOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PRENOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PAYSACCOMPAGNATEUR;
+    ~~~
+   
+3. Reprendre la requête précédente et afficher, en plus, le nombre total de places dans les cars, toujours par marque.
+    <!--FAUX-->
+    ~~~sql
+    SELECT AG_ACCOMPAGNATEURS.NOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PRENOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PAYSACCOMPAGNATEUR,COUNT(LIBELLELANGUE) AS "Nombre de langues parlees"
+    FROM AG_LANGUES,AG_ACCOMPAGNATEURS,AG_CONNAIT
+    WHERE AG_ACCOMPAGNATEURS.NUMACCOMPAGNATEUR=AG_CONNAIT.NUMACCOMPAGNATEUR
+    AND AG_CONNAIT.CODELANGUE=AG_LANGUES.CODELANGUE
+    GROUP BY  AG_ACCOMPAGNATEURS.NOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PRENOMACCOMPAGNATEUR,AG_ACCOMPAGNATEURS.PAYSACCOMPAGNATEUR
+    JOIN
+    SELECT NBRPLACECAR ,MARQUE
+    FROM AG_CARS;
+    ~~~
+ 
+4. Rechercher le nombre de villes traversées par chaque voyage. On affichera l'intitulé du voyage ainsi que le nombre 
+    de villes visitées.
+    ~~~sql
+    SELECT AG_VOYAGES.INTITULEVOYAGE, COUNT(AG_VILLES.NUMVILLE) AS "Nombre de villes visitees"
+    FROM AG_VOYAGES
+    JOIN AG_ITINERAIRES ON AG_VOYAGES.NUMVOYAGE = AG_ITINERAIRES.NUMVOYAGE
+    JOIN AG_VILLES ON AG_ITINERAIRES.NUMVILLE = AG_VILLES.NUMVILLE
+    GROUP BY AG_VOYAGES.INTITULEVOYAGE;
+    ~~~
+ 
+5. Rechercher le nombre d'activités pour chaque voyage. On affichera l'intitulé du voyage ainsi le nombre d'activités
+    correspondantes.
+    ~~~sql
+    SELECT AG_VOYAGES.INTITULEVOYAGE, COUNT(AG_ACTIVITES.NUMACTIVITE) AS "Nombre d'activites"
+    FROM AG_VOYAGES
+    JOIN AG_ESTPROPOSEE ON AG_VOYAGES.NUMVOYAGE = AG_ESTPROPOSEE.NUMVOYAGE
+    JOIN AG_ACTIVITES ON AG_ESTPROPOSEE.NUMACTIVITE = AG_ACTIVITES.NUMACTIVITE
+    GROUP BY AG_VOYAGES.INTITULEVOYAGE;
+    ~~~
+ 
+6. Compéter la requête précédente en affichant également le nombre maximum de places par activité ainsi que le prix 
+    total de toutes les activités de chaque voyage.
+    ~~~sql
+    SELECT AG_VOYAGES.INTITULEVOYAGE, COUNT(AG_ACTIVITES.NUMACTIVITE) AS "Nombre d'activites",MAX(AG_ACTIVITES.NBRPLACEACTIVITE),SUM(PRIXACTIVITE)
+    FROM AG_VOYAGES
+    JOIN AG_ESTPROPOSEE ON AG_VOYAGES.NUMVOYAGE = AG_ESTPROPOSEE.NUMVOYAGE
+    JOIN AG_ACTIVITES ON AG_ESTPROPOSEE.NUMACTIVITE = AG_ACTIVITES.NUMACTIVITE
+    GROUP BY AG_VOYAGES.INTITULEVOYAGE;
+    ~~~
+ 
+
