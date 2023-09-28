@@ -11,6 +11,8 @@
     WHERE LOCALITECLIENT ='Bruxelles' OR LOCALITECLIENT='Namur';
     ~~~
     _Version: Avec op ensembliste_
+    <!-- pour les op ensembl il faut que tout soit compatibles donc avoir les mme select -->
+
     ~~~sql
     SELECT NOMCLIENT, PRENOMCLIENT, LOCALITECLIENT
     FROM AG_CLIENTS
@@ -20,7 +22,7 @@
     FROM AG_CLIENTS
     WHERE LOCALITECLIENT = 'Namur';
     ~~~
-   
+
 2. Rechercher les clients qui possèdent à la fois un numéro de téléphone et un numéro de fax. On écrira 
     une requête ensembliste ainsi qu'une requête sans opérateur ensembliste.
     
